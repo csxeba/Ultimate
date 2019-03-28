@@ -1,6 +1,5 @@
 import random
 from typing import List
-from collections import deque
 
 
 def pop_from(hand: List):
@@ -37,7 +36,7 @@ class LardGame:
     def __init__(self):
         self.deck = Card.create_deck()
         self.hands = [[], []]  # type: List[List[int], List[int]]
-        self.wins = [[], []]
+        self.wins = [[], []]  # type: List[List[int], List[int]]
         self.talon = []
         self.hit = None
         self.lead = None
@@ -46,10 +45,10 @@ class LardGame:
 
     def deal(self):
         self.indices = list(range(len(self.deck)))
+        self.hands = [[], []]
         random.shuffle(self.indices)
         self.hands[0] = self.indices[:4]
         self.hands[1] = self.indices[4:8]
-        self.talon = self.indices[8:]
         self.indices = self.indices[8:]
 
     def pull(self):
@@ -69,7 +68,7 @@ class LardGame:
         elif valuable and can_trick_7:
             selected = self.hands[self.play].pop(figure_hand.index("7"))
         else:
-            selected = pop_from(self.hands[self.play])
+            selected = self.throw()
         return selected
 
     def initiate(self):
